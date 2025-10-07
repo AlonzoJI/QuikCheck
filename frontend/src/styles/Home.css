@@ -1,0 +1,228 @@
+/* floating animation */
+
+@keyframes float {
+    0% {transform: translateY(0px);}
+    50% {transform: translateY(-10px);}
+    100% {transform: translateY(0px);}
+}
+
+
+/* home page styles */
+
+.homepage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    gap: 90px;
+    color: white;
+    padding: 0 60px;
+}
+  
+/* left home page */
+
+.left-section {
+    max-width: 500px;
+    margin-bottom: 80px;  
+    padding-top: 40px;
+}
+  
+.left-section h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-align: left;
+    margin: 0;
+}
+
+/* swipe text special styling*/
+.swipe-text {
+    color: #000000;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.left-section p {
+    font-size: 18px;
+    line-height: 25px;
+    margin-top: 25px;
+    margin-bottom: 40px;
+    color: #000000;
+}
+
+/* button styling  */
+.buttons {
+    display: flex;
+    gap: 5px;           
+    justify-content: flex-start;
+}
+  
+.button-wrapper {
+    background: rgba(0, 0, 0, 0.25); 
+    backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 5px;
+    display: inline-block;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    margin-right: 20px;
+}
+
+.tiktok-button,
+.news-button {
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+    border: 2px solid #111;
+    background: linear-gradient(90deg, #ff3c6a, #32c5c0);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.tiktok-button:hover {
+    background: #de2550 !important;
+    transform: scale(1.10);
+}
+  
+.news-button {
+    background-color: transparent;
+}
+
+.news-button:hover {
+    background: #32c5c0 !important;
+    transform: scale(1.10);
+}
+ /* shimmer effect*/
+.tiktok-button, .news-button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+
+.tiktok-button::before, .news-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+  z-index: 1;
+}
+
+/* shimmer on hover */
+.tiktok-button:hover::before, .news-button:hover::before {
+  left: 100%;
+}
+  
+/* right page */
+.right-section {
+    display: flex;
+    gap: 30px;
+}
+
+
+/* card floating animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* cards */
+/* card background blur */
+.home-card {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(35px);
+    padding: 10px;
+    border-radius: 24px;
+    width: 280px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    animation: float 5s ease-in-out infinite;
+
+}
+/*pause float when hovered*/
+.home-card:hover {
+    animation-play-state: paused;
+}
+    animation: float 3s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform;
+}
+
+.home-card:hover {
+    animation-play-state: paused;
+    transform: translateY(-6px);
+    box-shadow: 0 11px 25px rgba(0, 0, 0, 0.12);
+}
+  
+.home-card-inner {
+    position: relative; 
+    background: white;
+    border: 2px solid #111;
+    color: black;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 16px;
+    padding: 62px 16px 32px; 
+    width: 100%;
+    display: flex;
+    
+}
+  
+.card-header {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+  
+.home-card-icon {
+    width: 45px;
+    height: 45px;
+    margin: 15px 0 36px;
+}
+
+/* dropdown name and icon for inside cards */
+
+.dropdown-name {
+    color: #1c1c1c;
+}
+  
+.dropdown-icon {
+    font-size: 12px;
+    color: #1c1c1c;
+}
+  
+.home-card h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #111;
+    margin-bottom: 6px;
+}
+  
+.home-card p {
+    margin: 0;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.4;
+}
+  

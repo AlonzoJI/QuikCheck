@@ -1,0 +1,10 @@
+yt-dlp
+openai-whisper
+ffmpeg-python
+requests
+python-dotenv
+certifi
+react-router-dom
+@google/generative-ai
+dotenv
+axios

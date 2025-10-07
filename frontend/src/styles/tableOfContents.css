@@ -1,0 +1,119 @@
+/* nav container */
+.navbar {
+    width: 100%;
+    padding: 8px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+
+}
+/* Background when scrolled */
+.navbar.scrolled {
+  background-color: rgba(255, 255, 255, 0.107); /* Very light white background */
+  backdrop-filter: blur(5px); /*blur
+  box-shadow: 0 2px 10px rgba(192, 192, 192, 0.1); /* Optional: subtle shadow */
+}
+
+/* left side of nav so logo and name */
+.left-nav {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.home-link {
+    text-decoration-line: none;
+}
+  
+/* web name (quikchek styling) */
+.left-nav h1 {
+    font-size: 30px;
+    color: black;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+    left: 20px;
+
+}
+  
+/* tt logo */
+.tiktok-logo {
+    position: absolute;
+    top: 8px;
+    left: -35px;
+    width: 110px;
+    z-index: 1;
+    transition: background 0.3s ease, transform 0.2s ease;
+    width: 60px; 
+    height: 60px; 
+    object-fit: contain;
+}
+
+.tiktok-logo:hover {
+    transform: scale(1.05);
+}
+  
+/* nav links on right side of nav */
+.nav-links {
+    display: flex;
+    gap: 38px;
+    padding-right: 86px;
+}
+
+  
+.nav-links a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.nav-links a:hover {
+    transform: scale(1.05);
+}
+
+.nav-icon-wrapper {
+    width: 54px;          
+    height: 54px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+}
+
+/* link icon */
+.nav-icon {
+    width: 60%;           
+    height: 60%;
+    object-fit: contain;
+}
+
+img.nav-icon {
+    border-radius: 50%;
+    object-fit: cover;
+}
+  
+/* link names under icons */
+.link-name,
+.name-link {
+    background-color: white;
+    color: black;
+    padding: 4px 4px;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-top: -10px;
+    font-size: 10px;
+    width: 54px;
+    text-align: center;
+}
+  

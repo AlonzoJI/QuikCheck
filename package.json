@@ -1,0 +1,29 @@
+{
+  "name": "quikchek",
+  "version": "1.0.0",
+  "description": "**Fast, reliable news for Gen Z with real-time misinformation detection**",
+  "main": "app/main.js",
+  "scripts": {
+    "start": "node app/main.js",
+    "dev": "nodemon app/main.js",
+    "test": "jest"
+  },
+  "keywords": ["news", "fact-checking", "misinformation", "gen-z", "react", "express", "postgresql"],
+  "author": "Jared Alonzo",
+  "license": "MIT",
+  "dependencies": {
+    "@google/genai": "^1.11.0",
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "react-router-dom": "^7.7.1"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
+  }
+}
