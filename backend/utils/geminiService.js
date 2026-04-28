@@ -1,15 +1,9 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require("dotenv");
+const path = require("path");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Adjust path to your root .env
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
-// now the guard will pass if the file has the key
 if (!process.env.GEMINI_API_KEY) {
   throw new Error("GEMINI_API_KEY is not set");
 }
@@ -17,11 +11,7 @@ if (!process.env.GEMINI_API_KEY) {
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-/**
- * Extract up to N short, checkable claims from a transcript.
- * Returns an array of strings.
- */
-export async function extractClaims(transcript, opts = {}) {
+async function extractClaims(transcript, opts = {}) {
   const max = Number.isFinite(opts.max) ? opts.max : 5;
 
   const prompt = `
@@ -32,7 +22,7 @@ export async function extractClaims(transcript, opts = {}) {
   - Each claim must be 3 to 12 words, self-contained, and verifiable.
   - No opinions, no questions, no quotes, no speaker names, no sources.
   - Remove duplicates and keep distinct ideas only.
-  - **Always include the main thesis or central assertion** (e.g., “The Earth is flat.”).
+  - **Always include the main thesis or central assertion** (e.g., "The Earth is flat.").
   - If there are fewer than ${max}, return fewer. If none, return {"claims": []}.
 
   Transcript:
@@ -56,11 +46,7 @@ export async function extractClaims(transcript, opts = {}) {
   return postProcessClaims(claims).slice(0, max);
 }
 
-/**
- * Same extraction but returns one newline-joined string,
- * ready to pass into your factCheck service.
- */
-export async function extractClaimsString(rawTranscript, opts = {}) {
+async function extractClaimsString(rawTranscript, opts = {}) {
   const max = Number.isFinite(opts.max) ? opts.max : 5;
   const claims = await extractClaims(rawTranscript, { max });
 
@@ -72,29 +58,18 @@ export async function extractClaimsString(rawTranscript, opts = {}) {
   return lines.join("\n");
 }
 
-/**
- * Build the exact JS snippet if you need it for display.
- */
-export function makeTranscriptSnippet(claims) {
+function makeTranscriptSnippet(claims) {
   const clean = postProcessClaims(claims).slice(0, 6);
   const body = clean.map(c => `  ${/[.!?]$/.test(c) ? c : c + "."}`).join("\n");
   return `const transcript = \`\n${body}\n\`;\n`;
 }
 
-/**
- * Convenience: from raw transcript to JS snippet directly.
- */
-export async function extractClaimsAsSnippet(transcript, opts = {}) {
+async function extractClaimsAsSnippet(transcript, opts = {}) {
   const claims = await extractClaims(transcript, opts);
   return makeTranscriptSnippet(claims.length ? claims : ["No clear claims detected."]);
 }
 
-/**
- * Summarize a set of URLs relative to a claim.
- * items: Array of { claim, url, title?, publisher? }
- * Returns [{ id, url, summary }]
- */
-export async function summarizeUrls(items) {
+async function summarizeUrls(items) {
   const input = {
     items: items.map((it, i) => ({
       id: i,
@@ -129,8 +104,6 @@ ${JSON.stringify(input)}
   }
 }
 
-/* Helpers */
-
 function toJson(s) {
   const fenced = s.match(/```json([\s\S]*?)```/i) || s.match(/```([\s\S]*?)```/);
   const body = fenced ? fenced[1] : s;
@@ -145,7 +118,7 @@ function postProcessClaims(items) {
   const out = [];
   for (const raw of items || []) {
     let s = String(raw || "").trim();
-    s = s.replace(/^["'“”]+|["'“”]+$/g, "");
+    s = s.replace(/^["'""]+|["'""]+$/g, "");
     s = s.replace(/\s+/g, " ");
     if (!s) continue;
     if (s.length > 140) s = s.slice(0, 137).trim() + "...";
@@ -157,3 +130,11 @@ function postProcessClaims(items) {
   }
   return out;
 }
+
+module.exports = {
+  extractClaims,
+  extractClaimsString,
+  makeTranscriptSnippet,
+  extractClaimsAsSnippet,
+  summarizeUrls,
+};

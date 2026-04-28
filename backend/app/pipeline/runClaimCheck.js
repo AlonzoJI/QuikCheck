@@ -1,22 +1,16 @@
-import "dotenv/config";
-import { execFile } from "child_process";
-import { fileURLToPath } from "url";
-import path from "path";
+require("dotenv/config");
+const { execFile } = require("child_process");
+const path = require("path");
 
-import {
+const {
   extractClaims,
   extractClaimsString,
   summarizeUrls,
   makeTranscriptSnippet,
-} from "../../utils/geminiService.js";
+} = require("../../utils/geminiService");
 
-import factCheckPkg from "../../utils/factCheckService.js";
-const { checkClaims } = factCheckPkg;
+const { checkClaims } = require("../../utils/factCheckService");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Adjust if your script lives elsewhere
 const pyScript = path.resolve(__dirname, "../linkVerification/linkConversion.py");
 
 function tiktokToTranscript(link) {
@@ -39,15 +33,7 @@ function tiktokToTranscript(link) {
   });
 }
 
-/**
- * Main pipeline from raw transcript:
- * 1) Extract short claims with Gemini
- * 2) Fact check each claim (top 1–2 reviews)
- * 3) Summarize unique URLs (Gemini)
- * Returns: { claims, claimsText, snippet, results }
- */
-export async function runFromTranscript(transcript) {
-  // 1) Extract claims (array) and also build the joined string + snippet for display
+async function runFromTranscript(transcript) {
   const claims = await extractClaims(transcript, { max: 5 });
   if (!claims?.length) {
     return { claims: [], claimsText: "", snippet: "", results: [] };
@@ -55,10 +41,8 @@ export async function runFromTranscript(transcript) {
   const claimsText = await extractClaimsString(transcript, { max: 5 });
   const snippet = makeTranscriptSnippet(claims);
 
-  // 2) Fact check array of claims
   const factChecks = await checkClaims(claims);
 
-  // 3) Collect unique URLs to summarize
   const items = [];
   const seen = new Set();
   for (const [claim, reviews] of Object.entries(factChecks)) {
@@ -72,7 +56,6 @@ export async function runFromTranscript(transcript) {
   const summaries = items.length ? await summarizeUrls(items) : [];
   const byUrl = new Map(summaries.map(s => [s.url, s.summary || ""]));
 
-  // 4) Build per-claim results
   const results = claims.map(claim => {
     const sources = (factChecks[claim] || []).map(r => ({
       url: r.url,
@@ -88,13 +71,12 @@ export async function runFromTranscript(transcript) {
   return { claims, claimsText, snippet, results };
 }
 
-export async function runFromLink(link) {
+async function runFromLink(link) {
   const transcript = await tiktokToTranscript(link);
   return runFromTranscript(transcript);
 }
 
-// Minimal CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (require.main === module) {
   const link = process.argv[2];
   if (!link) {
     console.error("Usage: node backend/app/pipeline/runClaimCheck.js <tiktok-url>");
@@ -102,7 +84,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   }
   runFromLink(link)
     .then(res => {
-      // Show the exact snippet your fact checker likes
       console.log("\n=== Extracted Claims Snippet ===\n");
       console.log(res.snippet);
       console.log("=== Results ===");
@@ -110,3 +91,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     })
     .catch(err => { console.error(err); process.exit(1); });
 }
+
+module.exports = { runFromTranscript, runFromLink };

@@ -38,9 +38,11 @@ app.use('/api/news', require('../routes/news'));
 app.use('/api/verify', require('../routes/verify'));
 app.use(require('../routes/tiktokCheck.js')); 
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 
 module.exports = app;

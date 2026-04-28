@@ -1,9 +1,6 @@
-import axios from "axios";
+const axios = require("axios");
 
-export async function checkClaims(
-  claims,
-  { languageCode = "en", maxPerClaim = 2 } = {}
-) {
+async function checkClaims(claims, { languageCode = "en", maxPerClaim = 2 } = {}) {
   const key = process.env.GOOGLE_FACT_CHECK_API_KEY;
   if (!key) throw new Error("GOOGLE_FACT_CHECK_API_KEY is not set");
 
@@ -42,4 +39,4 @@ export async function checkClaims(
   return out;
 }
 
-export default { checkClaims };
+module.exports = { checkClaims };

@@ -7,7 +7,7 @@ router.post("/api/tiktok-check", async (req, res) => {
     if (!url) return res.status(400).json({ ok: false, error: "Missing url" });
 
     url = String(url).replace(/\\/g, "").replace(/^"+|"+$/g, "").trim();
-    const { runFromLink } = await import("../app/pipeline/runClaimCheck.js");
+    const { runFromLink } = require("../app/pipeline/runClaimCheck");
     const data = await runFromLink(url);
     const { snippet = "", results = [] } = Array.isArray(data) ? { results: data } : data;
     return res.json({ ok: true, snippet, results });
