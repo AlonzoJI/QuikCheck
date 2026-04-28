@@ -36,7 +36,7 @@ const TikTokChecker = () => {
 
     setLoading(true);
     try {
-      const r = await fetch("/api/tiktok-check", {
+      const r = await fetch(`${import.meta.env.VITE_API_URL || ""}/api/tiktok-check`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: cleaned })
